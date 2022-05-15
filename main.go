@@ -1,16 +1,36 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	//value := r.URL.Query()["number"]
+type Request struct {
+	Matrix [][]int
+	Box [2]int
+}
 
-	//fmt.Fprintf(w, value[0])
+func firstRow(data *Request) {
+
+}
+
+func homePage(w http.ResponseWriter, r *http.Request) {
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	mJson := string(b[:])
+	data := Request{}
+	json.Unmarshal([]byte(mJson), &data)
+
+	if(data.Box[0] == 0)
+
 	fmt.Println("Endpoint Hit: homePage")
+	fmt.Fprint(w, data)
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +39,7 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	//http.HandleFunc("/", homePage)
+	http.HandleFunc("/calculate", homePage)
 	http.HandleFunc("/hello", helloWorld)
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }
