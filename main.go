@@ -48,6 +48,7 @@ func mod(re Request, box [2]byte) {
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
