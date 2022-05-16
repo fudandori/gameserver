@@ -72,7 +72,13 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	mod(data, data.Box)
 
 	fmt.Println("Endpoint Hit: homePage")
-	fmt.Fprint(w, data.Matrix)
+	var str, err2 = json.Marshal(data.Matrix)
+	if err2 == nil {
+		js := string(str)
+		fmt.Fprint(w, js)
+	} else {
+		fmt.Println(err2)
+	}
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
