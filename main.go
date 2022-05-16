@@ -9,28 +9,28 @@ import (
 )
 
 type Request struct {
-	Matrix [][]byte `json:"matrix"`
-	Box    [2]byte
+	Matrix [][]int `json:"matrix"`
+	Box    [2]int
 }
 
-func (re Request) x() byte {
+func (re Request) x() int {
 	return re.Box[0]
 }
 
-func (re Request) y() byte {
+func (re Request) y() int {
 	return re.Box[1]
 }
 
-func mod(re Request, box [2]byte) {
+func mod(re Request, box [2]int) {
 	x := box[0]
 	y := box[1]
-	height := byte(len(re.Matrix) - 1)
+	height := len(re.Matrix) - 1
 
 	if x < 0 || x > height {
 		return
 	}
 
-	width := byte(len(re.Matrix[x]) - 1)
+	width := len(re.Matrix[x]) - 1
 
 	if y < 0 || y > width {
 		return
@@ -60,10 +60,10 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(mJson)
 	fmt.Println(data)
-	box1 := [2]byte{data.x() - 1, data.y()}
-	box2 := [2]byte{data.x(), data.y() - 1}
-	box3 := [2]byte{data.x() + 1, data.y()}
-	box4 := [2]byte{data.x(), data.y() + 1}
+	box1 := [2]int{data.x() - 1, data.y()}
+	box2 := [2]int{data.x(), data.y() - 1}
+	box3 := [2]int{data.x() + 1, data.y()}
+	box4 := [2]int{data.x(), data.y() + 1}
 
 	mod(data, box1)
 	mod(data, box2)
