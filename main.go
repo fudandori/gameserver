@@ -9,12 +9,42 @@ import (
 )
 
 type Request struct {
-	Matrix [][]int
-	Box [2]int
+	Matrix [][]byte
+	Box    [2]byte
 }
 
-func firstRow(data *Request) {
+func (re Request) x() byte {
+	return re.Box[0]
+}
 
+func (re Request) y() byte {
+	return re.Box[1]
+}
+
+func mod(re Request, box [2]byte) {
+	x := box[0]
+	y := box[1]
+	height := byte(len(re.Matrix) - 1)
+
+	if x < 0 || x > height {
+		return
+	}
+
+	width := byte(len(re.Matrix[x]) - 1)
+
+	if y < 0 || y > width {
+		return
+	}
+
+	a := re.Matrix[x][y]
+
+	if a == 0 {
+		re.Matrix[x][y] = 1
+		fmt.Printf("changed %d to 1\n", a)
+	} else {
+		re.Matrix[x][y] = 0
+		fmt.Printf("changed %d to 0\n", a)
+	}
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -27,10 +57,19 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	data := Request{}
 	json.Unmarshal([]byte(mJson), &data)
 
-	if(data.Box[0] == 0)
+	box1 := [2]byte{data.x() - 1, data.y()}
+	box2 := [2]byte{data.x(), data.y() - 1}
+	box3 := [2]byte{data.x() + 1, data.y()}
+	box4 := [2]byte{data.x(), data.y() + 1}
+
+	mod(data, box1)
+	mod(data, box2)
+	mod(data, box3)
+	mod(data, box4)
+	mod(data, data.Box)
 
 	fmt.Println("Endpoint Hit: homePage")
-	fmt.Fprint(w, data)
+	fmt.Fprint(w, data.Matrix)
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
