@@ -57,6 +57,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	data := Request{}
 	json.Unmarshal([]byte(mJson), &data)
 
+	fmt.Println(data)
 	box1 := [2]byte{data.x() - 1, data.y()}
 	box2 := [2]byte{data.x(), data.y() - 1}
 	box3 := [2]byte{data.x() + 1, data.y()}
