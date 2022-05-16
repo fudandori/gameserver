@@ -73,6 +73,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Endpoint Hit: homePage")
 	var str, err2 = json.Marshal(&data)
+	fmt.Println(str)
 	if err2 == nil {
 		js := string(str)
 		fmt.Fprint(w, js)
