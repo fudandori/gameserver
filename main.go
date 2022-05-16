@@ -9,7 +9,7 @@ import (
 )
 
 type Request struct {
-	Matrix [][]byte
+	Matrix [][]byte `json:"matrix"`
 	Box    [2]byte
 }
 
@@ -72,7 +72,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	mod(data, data.Box)
 
 	fmt.Println("Endpoint Hit: homePage")
-	var str, err2 = json.Marshal(data.Matrix)
+	var str, err2 = json.Marshal(&data)
 	if err2 == nil {
 		js := string(str)
 		fmt.Fprint(w, js)
