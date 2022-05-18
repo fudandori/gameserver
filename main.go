@@ -51,18 +51,17 @@ func switchBoxes(x int, y int, matrix *[][]int) {
 		x := v[0]
 		y := v[1]
 
-		if !isValid(*matrix, x, y) {
-			return
-		}
+		if isValid(*matrix, x, y) {
 
-		a := (*matrix)[x][y]
+			a := (*matrix)[x][y]
 
-		if a == 0 {
-			(*matrix)[x][y] = 1
-			fmt.Printf("changed %d to 1\n", a)
-		} else {
-			(*matrix)[x][y] = 0
-			fmt.Printf("changed %d to 0\n", a)
+			if a == 0 {
+				(*matrix)[x][y] = 1
+				fmt.Printf("changed %d to 1\n", a)
+			} else {
+				(*matrix)[x][y] = 0
+				fmt.Printf("changed %d to 0\n", a)
+			}
 		}
 	}
 }
