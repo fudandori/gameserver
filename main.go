@@ -99,8 +99,13 @@ func generate(w http.ResponseWriter, r *http.Request) {
 
 	var req Request
 	req.Matrix = board
+
 	for i := 0; i < 6; i++ {
-		mod(req, [2]int{rand.Intn(n - 1), rand.Intn(n - 1)})
+		x := rand.Intn(n - 1)
+		y := rand.Intn(n - 1)
+		fmt.Println(fmt.Sprintf("%d,%d", x, y))
+		mod(req, [2]int{x, y})
+		fmt.Println(req.Matrix)
 	}
 
 	var str, err2 = json.Marshal(&req)
