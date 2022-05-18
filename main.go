@@ -88,6 +88,8 @@ func move(w http.ResponseWriter, r *http.Request) {
 func generate(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: generate")
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	const n = 5
 
 	board := make([][]int, n)
