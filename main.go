@@ -22,29 +22,48 @@ func (re Request) y() int {
 	return re.Box[1]
 }
 
-func mod(re Request, box [2]int) {
-	x := box[0]
-	y := box[1]
-	height := len(re.Matrix) - 1
+func isValid(matrix [][]int, x int, y int) bool {
+	height := len(matrix) - 1
 
 	if x < 0 || x > height {
-		return
+		return false
 	}
 
-	width := len(re.Matrix[x]) - 1
+	width := len(matrix[x]) - 1
 
 	if y < 0 || y > width {
-		return
+		return false
 	}
 
-	a := re.Matrix[x][y]
+	return true
+}
 
-	if a == 0 {
-		re.Matrix[x][y] = 1
-		fmt.Printf("changed %d to 1\n", a)
-	} else {
-		re.Matrix[x][y] = 0
-		fmt.Printf("changed %d to 0\n", a)
+func switchBoxes(x int, y int, matrix *[][]int) {
+	boxes := [][]int{
+		{x - 1, y},
+		{x, y - 1},
+		{x + 1, y},
+		{x, y + 1},
+		{x, y},
+	}
+
+	for _, v := range boxes {
+		x := v[0]
+		y := v[1]
+
+		if !isValid(*matrix, x, y) {
+			return
+		}
+
+		a := (*matrix)[x][y]
+
+		if a == 0 {
+			(*matrix)[x][y] = 1
+			fmt.Printf("changed %d to 1\n", a)
+		} else {
+			(*matrix)[x][y] = 0
+			fmt.Printf("changed %d to 0\n", a)
+		}
 	}
 }
 
@@ -62,18 +81,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	data := Request{}
 	json.Unmarshal([]byte(mJson), &data)
 
-	fmt.Println(mJson)
-	fmt.Println(data)
-	box1 := [2]int{data.x() - 1, data.y()}
-	box2 := [2]int{data.x(), data.y() - 1}
-	box3 := [2]int{data.x() + 1, data.y()}
-	box4 := [2]int{data.x(), data.y() + 1}
-
-	mod(data, box1)
-	mod(data, box2)
-	mod(data, box3)
-	mod(data, box4)
-	mod(data, data.Box)
+	switchBoxes(data.x(), data.y(), &data.Matrix)
 
 	var str, err2 = json.Marshal(&data)
 	fmt.Println(str)
@@ -103,13 +111,10 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < 6; i++ {
 		x := rand.Intn(n - 1)
 		y := rand.Intn(n - 1)
-		fmt.Println(fmt.Sprintf("%d,%d", x, y))
-		mod(req, [2]int{x, y})
-		fmt.Println(req.Matrix)
+		switchBoxes(x, y, &req.Matrix)
 	}
 
 	var str, err2 = json.Marshal(&req)
-	fmt.Println(str)
 	if err2 == nil {
 		js := string(str)
 		fmt.Fprint(w, js)
