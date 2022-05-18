@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 )
 
@@ -47,8 +48,11 @@ func mod(re Request, box [2]int) {
 	}
 }
 
-func homePage(w http.ResponseWriter, r *http.Request) {
+func move(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: move")
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
@@ -71,7 +75,6 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	mod(data, box4)
 	mod(data, data.Box)
 
-	fmt.Println("Endpoint Hit: homePage")
 	var str, err2 = json.Marshal(&data)
 	fmt.Println(str)
 	if err2 == nil {
@@ -82,14 +85,36 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello World!")
-	fmt.Println("Hello World Called")
+func generate(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: generate")
+
+	const n = 5
+
+	board := make([][]int, n)
+	for i := range board {
+		board[i] = make([]int, n)
+	}
+
+	var req Request
+	req.Matrix = board
+	for i := 0; i < 6; i++ {
+		mod(req, [2]int{rand.Intn(n - 1), rand.Intn(n - 1)})
+	}
+
+	var str, err2 = json.Marshal(&req)
+	fmt.Println(str)
+	if err2 == nil {
+		js := string(str)
+		fmt.Fprint(w, js)
+	} else {
+		fmt.Println(err2)
+	}
+
 }
 
 func handleRequests() {
-	http.HandleFunc("/calculate", homePage)
-	http.HandleFunc("/hello", helloWorld)
+	http.HandleFunc("/calculate", move)
+	http.HandleFunc("/generate", generate)
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }
 
