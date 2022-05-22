@@ -126,7 +126,7 @@ func generate(w http.ResponseWriter, r *http.Request) {
 func handleRequests() {
 	http.HandleFunc("/calculate", move)
 	http.HandleFunc("/generate", generate)
-	log.Fatal(http.ListenAndServe(":10000", nil))
+	log.Fatal(http.ListenAndServeTLS(":10000", "server.crt", "server.key", nil))
 }
 
 func main() {
