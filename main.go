@@ -124,9 +124,10 @@ func generate(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
+	http.Handle("/", http.FileServer(http.Dir("./static/cross-game")))
 	http.HandleFunc("/calculate", move)
 	http.HandleFunc("/generate", generate)
-	log.Fatal(http.ListenAndServeTLS(":10000", "server.crt", "server.key", nil))
+	log.Fatal(http.ListenAndServe(":10000", nil))
 }
 
 func main() {

@@ -1,0 +1,73 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: bisque;
+}
+
+.box {
+    height: 100px;
+    width: 100px;
+    background-color: black;
+    border: 2px solid white;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 500ms ease;
+}
+
+#board {
+    background-size: cover;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px 100px;
+    border: 2px double white;
+    transition: background-image 500ms linear;
+}
+
+.active {
+    background-image: url('assets/bg2.gif');
+}
+
+.win {
+    background-image: url('assets/win.gif');
+}
+
+#modal {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    transform: scale(0);
+    transform-origin: center;
+    transition: transform 10s ease-in;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.anim {
+    animation: win 3s ease-in-out infinite;
+}
+
+span {
+    font-size: 5rem;
+    color: gold;
+    -webkit-text-stroke: 2px black;
+}
+
+@keyframes win {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(5);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
